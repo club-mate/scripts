@@ -20,7 +20,7 @@ kv_output() {
     s/(IP)/&\t/g
     s/(rDNS)/\
 &\t/g
-    s/(TRUE|FALSE)/&\                   # 23!
+    s/(TRUE|FALSE)/&\
 /g
     s/(detected.)/&\
 /g
