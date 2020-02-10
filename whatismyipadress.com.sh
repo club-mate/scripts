@@ -7,12 +7,14 @@
 # Crawls and puts out the proxy detection table of whatismyipaddress.com
 
 # write a safe shellscript https://sipb.mit.edu/doc/safe-shell/
-set -euf -o pipefail
+#set -euf -o pipefail
 
-proxy="`curl --connect-timeout 20 -m 42 -sS -x "$1" -A 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)' 'https://whatismyipaddress.com/proxy-check'`"
+getSite() {
+ proxy="`curl --connect-timeout 20 -m 42 -sS -x "$1" -A 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)' 'https://whatismyipaddress.com/proxy-check'`"
+}
 
 detag() {
-  sed -r 's/[[:space:]]*<[^>]*>[[:space:]]*//g'
+ sed -r 's/[[:space:]]*<[^>]*>[[:space:]]*//g'
 }
 
 kv_output() {
@@ -29,7 +31,12 @@ kv_output() {
     s/Test/\t/g
   '
 }
+
 output() {
-echo "$proxy" | sed -n '/<!-- PAT:/p' | detag | kv_output | grep -v '^$'
+ getSite
+ echo "$proxy" | sed -n '/<!-- PAT:/p' | detag | kv_output | grep -v '^$'
 }
+
 output
+
+exit 0
